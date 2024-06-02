@@ -1,7 +1,11 @@
 import React, { useReducer, useEffect } from 'react';
+import axios from 'axios';
 import Map from "./components/Map";
 import Filter from "./components/Filter";
-import poisData from './pois.json';
+import poisData from "./pois.json";
+
+// API KEY
+// fsq3WfBxMJTyKoZq+7C6PeBF1Ba1h/a9257vEE5D1mA4GfM=
 
 // Initial state for Reducer
 const initialState = {
@@ -39,17 +43,16 @@ const reducer = (state, action) => {
 const App = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
+    
     const fetchPOIs = async () => {
   try {
-    const response = await axios.get('https://overpass-api.de/api/interpreter', {
+    const response = await axios.get('https://api.foursquare.com/v2/venues/explore', {
       params: {
-        data: `
-          [out:json];
-          node
-            ["amenity"]
-            (3.1390,101.6869,3.1490,101.6969);
-          out body;
-        `,
+        ll: '3.1390,101.6869', // Kuala Lumpur coordinates
+        client_id: 'UPEEYDNEADCWE5XXKPTQWNDPVVYIDSPUXPNGHEONZAT0IYEI', // Foursquare Client ID
+        client_secret: 'WKS0DNZA2YEG0GFAFJ0I2IAAABQXYV0EWVBNZ0NM3B05U4TF', // Foursquare Client Secret
+        v: '20230423', // Foursquare API version
+        limit: 50, // Limit number of results
       },
     });
 

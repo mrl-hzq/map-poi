@@ -2,8 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import axios from 'axios';
 import Map from "./components/Map";
 import Filter from "./components/Filter";
-import poisData from "./pois.json";
-
+5r
 // API KEY
 // fsq3WfBxMJTyKoZq+7C6PeBF1Ba1h/a9257vEE5D1mA4GfM=
 
@@ -45,25 +44,24 @@ const App = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
     
     const fetchPOIs = async () => {
-  try {
-    const response = await axios.get('https://api.foursquare.com/v2/venues/explore', {
-      params: {
-        ll: '3.1390,101.6869', // Kuala Lumpur coordinates
-        client_id: 'UPEEYDNEADCWE5XXKPTQWNDPVVYIDSPUXPNGHEONZAT0IYEI', // Foursquare Client ID
-        client_secret: 'WKS0DNZA2YEG0GFAFJ0I2IAAABQXYV0EWVBNZ0NM3B05U4TF', // Foursquare Client Secret
-        v: '20230423', // Foursquare API version
-        limit: 50, // Limit number of results
-      },
-    });
-
+        try {
+            const response = await axios.get('https://api.foursquare.com/v3/places/search', {
+              headers: {
+                Authorization: `Bearer ${process.env.REACT_APP_FOURSQUARE_API_KEY}`
+              },
+              params: {
+                ll: '3.1390,101.6869', // Kuala Lumpur coordinates
+                limit: 50, // Limit number of results
+              },
+            });
     
-    const data = response.data.elements.map(place => ({
-        id: place.id,
-        name: place.tags.name || 'Unnamed',
-        category: place.tags.amenity,
-        coordinates: [place.lat, place.lon]
-    }));
-
+    const data = response.data.results.map(place => ({
+        id: place.fsq_id,
+        name: place.name || 'Unnamed',
+        category: place.categories && place.categories.length > 0 ? place.categories[0].name : 'Uncategorized',
+        coordinates: [place.geocodes.main.latitude, place.geocodes.main.longitude],
+        }));
+        
     dispatch({ type: 'SET_POIS', payload: data});
     } catch (error) {
         console.error('Error fetching POIs', error);
@@ -93,3 +91,4 @@ const App = () => {
 };
 
 export default App;
+

@@ -1,5 +1,0 @@
-[
-  { "id": 1, "name": "Petronas Twin Towers", "category": "Landmark", "coordinates": [3.1578, 101.7123] },
-  { "id": 2, "name": "Batu Caves", "category": "Tourist Attraction", "coordinates": [3.2379, 101.6831] },
-  { "id": 3, "name": "Merdeka Square", "category": "Historical Site", "coordinates": [3.1466, 101.6921] }
-]
